@@ -80,6 +80,7 @@ Statyczna biblioteka TrouSerS.
 %prep
 %setup -q
 %patch0 -p1
+sed -i -e 's#-Werror##g' configure*
 
 %build
 %{__libtoolize}
