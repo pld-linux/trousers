@@ -1,18 +1,22 @@
 # TODO: tcsd init script (see dist/fedora/fedora.initrd.tcsd)
+#
+# Conditional build:
+%bcond_with	gtk	# use GTK+ popups instead of openssl
+#
 Summary:	TrouSerS - The open-source TCG Software Stack
 Summary(pl.UTF-8):	TrouSerS - programowy stos TCG o otwartych źródłach
 Name:		trousers
-Version:	0.3.4
+Version:	0.3.6
 Release:	1
 License:	CPL v1.0
 Group:		Applications/System
-Source0:	http://dl.sourceforge.net/trousers/%{name}-%{version}.tar.gz
-# Source0-md5:	72235fd6d2bb35b898a654429946f2e6
+Source0:	http://downloads.sourceforge.net/trousers/%{name}-%{version}.tar.gz
+# Source0-md5:	f4609e6446099e1403e23bb671df87f4
 Patch0:		%{name}-nouser.patch
 URL:		http://trousers.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake >= 1.6
-BuildRequires:	gtk+2-devel >= 1:2.0.0
+%{?with_gtk:BuildRequires:	gtk+2-devel >= 1:2.0.0}
 BuildRequires:	libtool
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
@@ -56,7 +60,7 @@ Summary:	Header files for TrouSerS library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki TrouSerS
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	gtk+2-devel >= 1:2.0.0
+%{?with_gtk:Requires:	gtk+2-devel >= 1:2.0.0}
 Requires:	openssl-devel
 
 %description devel
@@ -80,7 +84,6 @@ Statyczna biblioteka TrouSerS.
 %prep
 %setup -q
 %patch0 -p1
-sed -i -e 's#-Werror##g' configure*
 
 %build
 %{__libtoolize}
@@ -88,7 +91,8 @@ sed -i -e 's#-Werror##g' configure*
 %{__autoconf}
 %{__automake}
 %configure \
-	--enable-static
+	--enable-static \
+	%{?with_gtk:--with-gui=gtk}
 %{__make}
 
 %install
@@ -125,6 +129,7 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libtspi.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libtspi.so.1
 
 %files devel
 %defattr(644,root,root,755)
