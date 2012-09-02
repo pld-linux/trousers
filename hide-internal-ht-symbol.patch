@@ -1,0 +1,21 @@
+--- trousers-0.3.9/src/include/hosttable.h.orig	2011-05-04 16:33:11.000000000 +0200
++++ trousers-0.3.9/src/include/hosttable.h	2012-09-02 21:18:31.891307206 +0200
+@@ -33,7 +33,6 @@
+ 	MUTEX_DECLARE(lock);
+ };
+ 
+-extern struct host_table *ht;
+ struct host_table_entry *get_table_entry(TCS_CONTEXT_HANDLE);
+ void put_table_entry(struct host_table_entry *);
+ TSS_RESULT __tspi_add_table_entry(TSS_HCONTEXT, BYTE *, int, struct host_table_entry **);
+--- trousers-0.3.9/src/tspi/rpc/hosttable.c.orig	2011-05-04 16:33:11.000000000 +0200
++++ trousers-0.3.9/src/tspi/rpc/hosttable.c	2012-09-02 21:18:44.017974230 +0200
+@@ -19,7 +19,7 @@
+ #include "hosttable.h"
+ #include "obj.h"
+ 
+-struct host_table *ht = NULL;
++static struct host_table *ht = NULL;
+ 
+ TSS_RESULT
+ host_table_init()
