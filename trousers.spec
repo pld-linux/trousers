@@ -6,12 +6,12 @@
 Summary:	TrouSerS - The open-source TCG Software Stack
 Summary(pl.UTF-8):	TrouSerS - programowy stos TCG o otwartych źródłach
 Name:		trousers
-Version:	0.3.10
+Version:	0.3.11.2
 Release:	1
-License:	CPL v1.0
+License:	BSD
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/trousers/%{name}-%{version}.tar.gz
-# Source0-md5:	27b7374d991874b4a0a973b1c952c79f
+# Source0-md5:	ab38dcb2811099dce379c64d43589f50
 Patch0:		%{name}-nouser.patch
 URL:		http://trousers.sourceforge.net/
 BuildRequires:	autoconf
