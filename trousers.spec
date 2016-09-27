@@ -12,6 +12,7 @@ License:	BSD
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/trousers/%{name}-%{version}.tar.gz
 # Source0-md5:	ad508f97b406f6e48cd90e85d78e7ca8
+Source1:	tcsd.service
 Patch0:		no_inline.patch
 URL:		http://trousers.sourceforge.net/
 BuildRequires:	autoconf
@@ -20,6 +21,7 @@ BuildRequires:	automake >= 1.6
 BuildRequires:	libtool
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
+BuildRequires:	rpmbuild(macros) >= 1.644
 BuildRequires:	sed >= 4.0
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
@@ -28,6 +30,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	systemd-units >= 38
 Provides:	group(tss)
 Provides:	user(tss)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -107,6 +110,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install %{SOURCE1} $RPM_BUILD_ROOT%{systemdunitdir}/tcsd.service
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -114,11 +119,18 @@ rm -rf $RPM_BUILD_ROOT
 %groupadd -g 139 tss
 %useradd -u 139 -d %{_localstatedir}/lib/tpm -s /bin/false -c "TrouSerS user" -g tss tss
 
+%post
+%systemd_post tcsd.service
+
+%preun
+%systemd_preun tcsd.service
+
 %postun
 if [ "$1" = "0" ]; then
 	%userremove tss
 	%groupremove tss
 fi
+%systemd_reload
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
@@ -131,6 +143,7 @@ fi
 %attr(700,tss,tss) %{_localstatedir}/lib/tpm
 %{_mandir}/man5/tcsd.conf.5*
 %{_mandir}/man8/tcsd.8*
+%{systemdunitdir}/tcsd.service
 
 %files libs
 %defattr(644,root,root,755)
