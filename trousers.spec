@@ -12,6 +12,7 @@ License:	BSD
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/trousers/%{name}-%{version}.tar.gz
 # Source0-md5:	ad508f97b406f6e48cd90e85d78e7ca8
+Patch0:		no_inline.patch
 URL:		http://trousers.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake >= 1.6
@@ -83,6 +84,8 @@ Statyczna biblioteka TrouSerS.
 
 %prep
 %setup -q
+
+%patch0 -p1
 
 # there is some unused variable causing warning
 sed -i -e 's/-Werror //' configure.in
