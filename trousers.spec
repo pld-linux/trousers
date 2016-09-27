@@ -7,7 +7,7 @@ Summary:	TrouSerS - The open-source TCG Software Stack
 Summary(pl.UTF-8):	TrouSerS - programowy stos TCG o otwartych źródłach
 Name:		trousers
 Version:	0.3.13
-Release:	2
+Release:	3
 License:	BSD
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/trousers/%{name}-%{version}.tar.gz
@@ -106,6 +106,7 @@ sed -i -e 's/-Werror //' configure.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{systemdunitdir}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
