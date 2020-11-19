@@ -86,7 +86,7 @@ Static TrouSerS library.
 Statyczna biblioteka TrouSerS.
 
 %prep
-%setup -q -c
+%setup -q
 %patch0 -p1
 
 %build
